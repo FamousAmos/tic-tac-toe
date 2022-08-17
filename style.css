@@ -377,3 +377,16 @@ template {
 [hidden] {
   display: none;
 }
+
+.squares {
+  width: 50vw;
+  height: 60vh;
+  display: grid;
+  margin: 0 auto;
+  grid-template-columns: 1fr 1fr 1fr;
+  border: 1px solid black;
+}
+
+.square {
+  border: 1px solid gray;
+}
