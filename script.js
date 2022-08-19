@@ -15,17 +15,18 @@ const gameBoard = (() => {
     square.className = "square";
     square.textContent = "";
     square.addEventListener("click", () => {
-      if (square.textContent === "") {
+      if (square.textContent === "" && game.gameWon === false) {
         square.classList.add(game.activePlayer.marker);
         square.textContent = game.activePlayer.marker;
         board[index] = game.activePlayer.marker;
         game.openSquares -= 1;
+        game.verifyWinner();
       }
 
       if (game.gameWon === false && game.openSquares > 0) {
         game.nextPlayer();
       } else {
-        // game.declareTie();
+        game.declareTie();
       }
     });
     squares.appendChild(square);
@@ -45,6 +46,17 @@ const game = (() => {
   let player = document.querySelector(".player");
   player.textContent = "Player 1";
 
+  const winningSequences = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
   function nextPlayer() {
     if (this.activePlayer === playerOne) {
       this.activePlayer = playerTwo;
@@ -55,5 +67,29 @@ const game = (() => {
     }
   }
 
-  return { activePlayer, gameWon, openSquares, nextPlayer };
+  function verifyWinner() {
+    winningSequences.forEach((sequence) => {
+      if (sequence.every(isSameMark)) {
+        dialogue.innerHTML = `${this.activePlayer.name} wins!`;
+        this.gameWon = true;
+      }
+    });
+  }
+
+  function isSameMark(index) {
+    return gameBoard.board[index] === this.activePlayer.marker;
+  }
+
+  function declareTie() {
+    dialogue.innerHTML = "Tie game!";
+  }
+
+  return {
+    activePlayer,
+    gameWon,
+    openSquares,
+    nextPlayer,
+    verifyWinner,
+    declareTie,
+  };
 })();
