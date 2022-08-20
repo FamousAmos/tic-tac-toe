@@ -20,12 +20,13 @@ const gameBoard = (() => {
         square.textContent = game.activePlayer.marker;
         board[index] = game.activePlayer.marker;
         game.openSquares -= 1;
-        game.verifyWinner();
       }
+
+      game.verifyWinner();
 
       if (game.gameWon === false && game.openSquares > 0) {
         game.nextPlayer();
-      } else {
+      } else if (game.openSquares === 0) {
         game.declareTie();
       }
     });
@@ -77,7 +78,7 @@ const game = (() => {
   }
 
   function isSameMark(index) {
-    return gameBoard.board[index] === this.activePlayer.marker;
+    return gameBoard.board[index] === game.activePlayer.marker;
   }
 
   function declareTie() {
